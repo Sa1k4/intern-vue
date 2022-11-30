@@ -7,6 +7,7 @@
           <el-select v-model="user.role" placeholder="请选择登录身份" size="medium" style="margin: 10px 0;width: 100%">
             <el-option label="学生" value="student" ></el-option>
             <el-option label="教师" value="teacher"></el-option>
+            <el-option label="企业" value="company"></el-option>
             <el-option label="管理员" value="admin"></el-option>
           </el-select>
         </el-form-item>
@@ -58,7 +59,7 @@ export default {
               if (res.code ===200) {
                 localStorage.setItem("admin",JSON.stringify(res.data.userinfo))
                 this.$message.success("登录成功")
-                // this.$router.push("/admin")
+                this.$router.push("/admin")
               } else {
                 this.$message.error("用户名或密码错误！")
               }
@@ -80,7 +81,18 @@ export default {
               if (res.code === 200) {
                 localStorage.setItem("student",JSON.stringify(res.data.userinfo))
                 this.$message.success("登录成功")
-                // this.$router.push("/student")
+                this.$router.push("/student")
+              } else {
+                this.$message.error("用户名或密码错误！")
+              }
+            })
+          }
+          if (this.user.role === 'company') {
+            this.request.post("/company/login", this.user).then(res => {
+              if (res.code ===200) {
+                localStorage.setItem("company",JSON.stringify(res.data.userinfo))
+                this.$message.success("登录成功")
+                this.$router.push("/company")
               } else {
                 this.$message.error("用户名或密码错误！")
               }
