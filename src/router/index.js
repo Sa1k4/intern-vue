@@ -14,6 +14,21 @@ const routes = [
     name: 'Register',
     component: () => import('../views/Register.vue'),
   },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('../views/Admin/AdminStu.vue'),
+  },
+  {
+    path: '/adminT',
+    name: 'Admin',
+    component: () => import('../views/Admin/AdminT.vue'),
+  },
+  {
+    path: '/adminC',
+    name: 'Admin',
+    component: () => import('../views/Admin/AdminC.vue'),
+  },
 ]
 
 const router = new VueRouter({
