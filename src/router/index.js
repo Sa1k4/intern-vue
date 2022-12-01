@@ -17,7 +17,17 @@ const routes = [
   {
     path: '/admin',
     name: 'Admin',
-    component: () => import('../views/Admin.vue'),
+    component: () => import('../views/Admin/AdminStu.vue'),
+  },
+  {
+    path: '/adminT',
+    name: 'Admin',
+    component: () => import('../views/Admin/AdminT.vue'),
+  },
+  {
+    path: '/adminC',
+    name: 'Admin',
+    component: () => import('../views/Admin/AdminC.vue'),
   },
 ]
 

@@ -11,30 +11,22 @@
                  router
         >
           <div style="height: 60px; line-height: 60px; text-align: center">
-            <img src="../assets/logo.png" alt="" style="width: 20px; position: relative; top: 5px; right: 5px">
-            <b style="color: white" v-show="logoTextShow">课程作业管理系统</b>
+            <img src="../../assets/logo.png" alt="" style="width: 20px; position: relative; top: 5px; right: 5px">
+            <b style="color: white" v-show="logoTextShow">大学生实习管理系统</b>
           </div>
   
-          <el-menu-item index="/adminStudent">
-          <template slot="title">
-            <i class="el-icon-user"></i>
-            <span slot="title">学生管理</span>
-          </template>
-          </el-menu-item>
-  
-          <el-menu-item index="/adminTeacher">
-            <template slot="title">
-              <i class="el-icon-s-custom"></i>
-              <span slot="title">教师管理</span>
-            </template>
-          </el-menu-item>
-  
-          <el-menu-item index="/adminFeedback">
-            <template slot="title">
-              <i class="el-icon-question"></i>
-              <span slot="title">问题反馈</span>
-            </template>
-          </el-menu-item>
+            <el-menu-item index="/admin" style="color:#39c5bb">
+                <i class="el-icon-user"></i>
+                <span slot="title">学生信息管理</span>
+            </el-menu-item>
+            <el-menu-item index="/adminT">
+                <i class="el-icon-s-custom"></i>
+                <span slot="title">教师信息管理</span>
+            </el-menu-item>
+            <el-menu-item index="/adminC">
+                <i class="el-icon-school"></i>
+                <span slot="title">企业信息管理</span>
+            </el-menu-item>
   
         </el-menu>
       </el-aside>
@@ -58,7 +50,7 @@
         <el-main>
           <div style="margin-bottom: 30px">
             <el-breadcrumb separator="/">
-              <el-breadcrumb-item :to="{ path: '' }">后台管理</el-breadcrumb-item>
+              <el-breadcrumb-item :to="{ path: '/admin' }">后台管理</el-breadcrumb-item>
               <el-breadcrumb-item>学生管理</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
@@ -137,7 +129,7 @@
           <el-dialog title="新增学生" :visible.sync="dialogFormVisible" width="35%">
             <el-form size="small" :rules="studentRules" ref="studentForm" :model="form">
               <el-form-item label="学生学号:" prop="stu_id">
-                <el-input v-model="form.stu_id" autocomplete="off"></el-input>
+                <el-input v-model="form.stu_id" autocomplete="off" onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
               </el-form-item>
               <el-form-item label="学生姓名:" prop="username">
                 <el-input v-model="form.username" autocomplete="off"></el-input>
@@ -172,7 +164,7 @@
   
           <el-dialog title="修改学生信息" :visible.sync="EdialogFormVisible" width="35%">
             <el-form size="small" :rules="studentRules" ref="studentForm" :model="form">
-              <el-form-item label="学生学号:" prop="stu_id">
+              <el-form-item label="学生学号:" prop="stu_id" hidden>
                 <el-input v-model="form.stu_id" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item label="学生姓名:" prop="username">
@@ -308,9 +300,9 @@
               stu_id: this.student_id
             }
           }).then(res =>{
-                    console.log(res)
-                    this.tableData = res.data
-                    this.total = res.total
+                    console.log(res.data)
+                    this.tableData = res.data.data
+                    this.total = res.data.total
                   })
         },
         search(){
@@ -323,19 +315,22 @@
               stu_id: this.student_id
             }
           }).then(res =>{
-                    console.log(res)
-                    this.tableData = res.data
-                    this.total = res.total
+                    console.log(res.data)
+                    this.tableData = res.data.data
+                    this.total = res.data.total
                   })
         },
         save(){
           this.$refs['studentForm'].validate((valid) => {
             if(valid){
                 this.request.post("/student/register",this.form).then(res =>{
-                if(res){
+                if(res.code == 200){
                 this.$message.success("新增成功")
                 this.dialogFormVisible = false
-                // this.pageNum = Math.ceil((this.total+1)/this.pageSize)
+                this.student_id=""
+                this.student_name=""
+                this.student_class=""
+                this.pageNum=1
                 this.load()
                 }else {
                 this.$message.error("新增失败")
@@ -349,7 +344,7 @@
             if(valid){
                 this.form.stu_id = parseInt(this.form.stu_id);
                 this.request.post("/student/update",this.form).then(res =>{
-                    if(res){
+                    if(res.code == 200){
                     this.$message.success("修改成功")
                     this.EdialogFormVisible = false
                     this.load()
@@ -362,7 +357,7 @@
         },
         del(id){
           this.request.delete("/student/delete"+id).then(res =>{
-            if(res){
+            if(res.code == 200){
               this.$message.success("删除成功")
               this.load()
             }else {
@@ -373,7 +368,7 @@
         delMultiple(){
           let ids = this.multipleSelection.map(v => v.stu_id)
           this.request.post("/student/deleteMultiple", ids).then(res =>{
-            if(res){
+            if(res.code == 200){
               this.$message.success("删除成功")
               this.load()
             }else {
@@ -416,11 +411,11 @@
               stu_id: this.student_id
             }
           }).then(res =>{
-                    console.log(res)
-                    let realPage = Math.ceil(res.total/this.pageSize);
+                    console.log(res.data)
+                    let realPage = Math.ceil(res.data.total/this.pageSize);
                     if(realPage == 0)this.pageNum = 1;
                     else
-                    if(res.data.length==0)this.pageNum=realPage;
+                    if(res.data.data.length==0)this.pageNum=realPage;
                     else this.pageNum = pageNum;
                     this.load();
                   })

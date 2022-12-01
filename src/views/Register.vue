@@ -6,7 +6,7 @@
                 <el-tab-pane label="学生注册" name="student">
                     <el-form :model="student" :rules="studentRules" ref="studentForm">
                         <el-form-item prop="stu_id">
-                            <el-input placeholder="请输入学号" size="medium" style="margin: 10px 0" prefix-icon="el-icon-postcard" v-model="student.stu_id"></el-input>
+                            <el-input placeholder="请输入学号" size="medium" style="margin: 10px 0" prefix-icon="el-icon-postcard" v-model="student.stu_id" onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
                         </el-form-item>
                         <el-form-item prop="username">
                             <el-input placeholder="请输入姓名" size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" v-model="student.username"></el-input>
@@ -27,7 +27,7 @@
                             <el-input placeholder="请输入班级" size="medium" style="margin: 10px 0" prefix-icon="el-icon-data-board" v-model="student.classname"></el-input>
                         </el-form-item>
                         <el-form-item prop="phone">
-                            <el-input placeholder="请输入手机号码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-phone" v-model="student.phone"></el-input>
+                            <el-input placeholder="请输入手机号码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-phone" v-model="student.phone" onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
                         </el-form-item>
                         <el-form-item prop="password">
                             <el-input placeholder="请输入密码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-lock" show-password
@@ -47,7 +47,7 @@
                 <el-tab-pane label="教师注册" name="teacher">
                     <el-form :model="teacher" :rules="teacherRules" ref="teacherForm">
                         <el-form-item prop="t_id">
-                            <el-input placeholder="请输入教师编号" size="medium" style="margin: 10px 0" prefix-icon="el-icon-postcard" v-model="teacher.t_id"></el-input>
+                            <el-input placeholder="请输入教师编号" size="medium" style="margin: 10px 0" prefix-icon="el-icon-postcard" v-model="teacher.t_id" onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
                         </el-form-item>
                         <el-form-item prop="username">
                             <el-input placeholder="请输入姓名" size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" v-model="teacher.username"></el-input>
@@ -62,7 +62,7 @@
                             <el-input placeholder="请输入学院" size="medium" style="margin: 10px 0" prefix-icon="el-icon-school" v-model="teacher.academy"></el-input>
                         </el-form-item>
                         <el-form-item prop="phone">
-                            <el-input placeholder="请输入手机号码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-phone" v-model="teacher.phone"></el-input>
+                            <el-input placeholder="请输入手机号码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-phone" v-model="teacher.phone" onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
                         </el-form-item>
                         <el-form-item prop="password">
                             <el-input placeholder="请输入密码" size="medium" style="margin: 10px 0" prefix-icon="el-icon-lock" show-password
@@ -245,7 +245,7 @@
                             return false
                         }
                         this.request.post("/student/register", this.student).then(res =>{
-                            if (res){
+                            if (res.code == 200){
                                 this.$message.success("注册成功")
                                 this.$router.push('/')
                             }else{
@@ -264,7 +264,7 @@
                             return false
                         }
                         this.request.post("/teacher/register", this.teacher).then(res =>{
-                            if (res){
+                            if (res.code == 200){
                                 this.$message.success("注册成功")
                                 this.$router.push('/')
                             }else{
@@ -286,7 +286,7 @@
                 if (res !== null) {
                     this.company.company_licence = res;
                     this.request.post("/company/register", this.company).then(res =>{
-                            if (res){
+                            if (res.code == 200){
                                 this.$message.success("注册成功")
                                 this.$router.push('/')
                             }else{
