@@ -29,6 +29,21 @@ const routes = [
     name: 'Admin',
     component: () => import('../views/Admin/AdminC.vue'),
   },
+  {
+    path: '/student',
+    name: 'Student',
+    component: () => import('../views/Student/StudentInfo.vue'),
+  },
+  {
+    path: '/company',
+    name: 'Company',
+    component: () => import('../views/Company/CompanyInfo.vue'),
+  },
+  {
+    path: '/companyP',
+    name: 'Company',
+    component: () => import('../views/Company/Profession.vue'),
+  },
 ]
 
 const router = new VueRouter({

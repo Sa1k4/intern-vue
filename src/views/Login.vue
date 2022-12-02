@@ -67,7 +67,12 @@ export default {
             })
           }
           if (this.user.role === 'teacher') {
-            this.request.post("/teacher/login", this.user).then(res => {
+            this.request.get("/teacher/login", {
+              params:{
+                username: this.user.username,
+                password: this.user.password,
+              }
+            }).then(res => {
               if (res.code ===200) {
                 localStorage.setItem("teacher",JSON.stringify(res.data.userinfo))
                 this.$message.success("登录成功")
@@ -78,7 +83,12 @@ export default {
             })
           }
           if (this.user.role === 'student') {
-            this.request.post("/student/login", this.user).then(res => {
+            this.request.get("/student/login",{
+              params:{
+                username: this.user.username,
+                password: this.user.password,
+              }
+            }).then(res => {
               if (res.code === 200) {
                 localStorage.setItem("student",JSON.stringify(res.data.userinfo))
                 this.$message.success("登录成功")
@@ -89,7 +99,12 @@ export default {
             })
           }
           if (this.user.role === 'company') {
-            this.request.post("/company/login", this.user).then(res => {
+            this.request.get("/company/login",{
+              params:{
+                username: this.user.username,
+                password: this.user.password,
+              }
+            }).then(res => {
               if (res.code ===200) {
                 localStorage.setItem("company",JSON.stringify(res.data.userinfo))
                 this.$message.success("登录成功")
