@@ -19,7 +19,7 @@
                 <i class="el-icon-user"></i>
                 <span slot="title">个人信息</span>
             </el-menu-item>
-            <el-menu-item index="/" v-if="form.apply==2">
+            <el-menu-item index="/studentP" v-if="form.apply==2">
                 <i class="el-icon-s-cooperation"></i>
                 <span slot="title">岗位申请</span>
             </el-menu-item>
@@ -61,7 +61,7 @@
           <div style="margin-bottom: 30px">
             <el-breadcrumb separator="/">
               <el-breadcrumb-item :to="{ path: '/student' }">主页</el-breadcrumb-item>
-              <el-breadcrumb-item>我的信息</el-breadcrumb-item>
+              <el-breadcrumb-item>个人信息</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
           
@@ -89,7 +89,9 @@
                         </el-upload>
             <div style="margin: 10px 0; margin-top: 30px;">简历查看：</div>
             <div v-if="form.vitae==null" style="margin: 10px 0; margin-top: 30px;color: red;">您还没有上传简历！</div>
-            <el-button v-if="form.vitae!=null" size="small" type="primary" @click="download()">下载</el-button>
+            <a :href="('http://localhost:8081/file/download?url='+this.form.vitae)" v-if="form.vitae!=null" >
+                <el-button size="small" type="success">查看文件</el-button>
+            </a>
           </div>
 
           <div title="我的信息" style="margin-top:30px">
@@ -255,9 +257,6 @@
                   }
               })
             }
-        },
-        download() {
-          window.open("http://localhost:8081/file/download?url="+this.form.vitae)
         },
         handleChange(file, fileList) {
             console.log("change",file,fileList);
