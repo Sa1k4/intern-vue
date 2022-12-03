@@ -15,19 +15,26 @@
             <b style="color: white" v-show="logoTextShow">大学生实习管理系统</b>
           </div>
   
-            <el-menu-item index="/company" style="color:#39c5bb">
+            <el-menu-item index="/teacher" style="color:#39c5bb">
                 <i class="el-icon-user"></i>
-                <span slot="title">企业信息</span>
+                <span slot="title">个人信息</span>
             </el-menu-item>
-            <el-menu-item index="/companyP">
-                <i class="el-icon-s-cooperation"></i>
-                <span slot="title">企业岗位管理</span>
-            </el-menu-item>
-            <el-menu-item index="/">
-                <i class="el-icon-s-order"></i>
-                <span slot="title">评价</span>
-            </el-menu-item>
-  
+            <el-submenu index="/1">
+              <template slot="title">
+                <i class="el-icon-tickets"></i>
+                <span>审批</span>
+              </template>
+              <el-menu-item index="/">学生实习审批</el-menu-item>
+              <el-menu-item index="/">学生实习请假审批</el-menu-item>
+            </el-submenu>
+            <el-submenu index="/2">
+              <template slot="title">
+                <i class="el-icon-menu"></i>
+                <span>学生管理</span>
+              </template>
+              <el-menu-item index="/">学生信息查看</el-menu-item>
+              <el-menu-item index="/">学生添加</el-menu-item>
+            </el-submenu>
         </el-menu>
       </el-aside>
   
@@ -37,7 +44,7 @@
             <span :class="collapseBtnClass" style="cursor: pointer" @click="collapse"></span>
           </div>
           <el-dropdown style="cursor: pointer" trigger="click">
-            <span><span style="font-size: 18px">{{userinfo.company_name}}</span><i class="el-icon-arrow-down" style=""></i></span>
+            <span><span style="font-size: 18px">{{userinfo.username}}</span><i class="el-icon-arrow-down" style=""></i></span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item style="font-size: 16px; margin: 10px 10px;padding: 0">
               <span style="text-decoration: none;color: black;width: 100%;height: 100%;display: inline-table;" @click="logout">退出</span>
@@ -50,48 +57,31 @@
         <el-main>
           <div style="margin-bottom: 30px">
             <el-breadcrumb separator="/">
-              <el-breadcrumb-item :to="{ path: '/company' }">主页</el-breadcrumb-item>
-              <el-breadcrumb-item>企业信息</el-breadcrumb-item>
+              <el-breadcrumb-item :to="{ path: '/teacher' }">主页</el-breadcrumb-item>
+              <el-breadcrumb-item>个人信息</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
           
-          <div style="margin: 10px 0; margin-top: 30px;">
-            <div style="margin: 10px 0">企业凭证更改：</div>
-                        <el-upload
-                            style="margin: 10px 0"
-                            class="upload"
-                            ref="upload"
-                            action="http://localhost:8081/file/upload"
-                            :on-success="handleSuccessEdit"
-                            :on-preview="handlePreview"
-                            :on-remove="handleRemove"
-                            :on-change="handleChange"
-                            :file-list="fileList"
-                            :limit=1
-                            :auto-upload="false">
-                            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                            <div slot="tip" class="el-upload__tip">请上传企业凭证，且不超过50MB</div>
-                        </el-upload>
-            <div style="margin: 10px 0; margin-top: 30px;">企业凭证查看：</div>
-            <a :href="'http://localhost:8081/file/download?url='+this.form.company_licence">
-                <el-button size="small" type="success">查看文件</el-button>
-            </a>
-          </div>
 
-          <div title="企业信息" style="margin-top:30px">
+          <div title="我的信息" style="margin-top:30px">
             <el-form size="small" :rules="Rules" ref="Form" :model="form">
-              <el-form-item label="企业编号:" prop="cpmy_id" hidden>
-                <el-input v-model="form.cpmy_id" autocomplete="off" disabled></el-input>
+              <el-form-item label="工号:" prop="t_id">
+                <el-input v-model="form.t_id" autocomplete="off" disabled></el-input>
               </el-form-item>
-              <el-form-item label="企业名称:" prop="company_name">
-                <el-input v-model="form.company_name" autocomplete="off"></el-input>
-              </el-form-item>
-          
-              <el-form-item label="企业法人:" prop="company_legal">
-                <el-input v-model="form.company_legal" autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="用户名:" prop="username">
+              <el-form-item label="姓名:" prop="username">
                 <el-input v-model="form.username" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="性别:" prop="sex">
+                <el-select v-model="form.sex" size="medium" style="width: 100%">
+                            <el-option label="男" value="男"></el-option>
+                            <el-option label="女" value="女"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="电话:" prop="phone">
+                <el-input v-model="form.phone" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="学院:" prop="academy">
+                <el-input v-model="form.academy" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item label="密码:" prop="password">
                 <el-input v-model="form.password" autocomplete="off"></el-input>
@@ -115,7 +105,7 @@
       name: 'Home',
       data() {
         return {
-          userinfo:localStorage.getItem("company")? JSON.parse(localStorage.getItem("company")) :"",
+          userinfo:localStorage.getItem("teacher")? JSON.parse(localStorage.getItem("teacher")) :"",
           form:{},
           fileList: [],
           collapseBtnClass: 'el-icon-s-fold',
@@ -124,17 +114,20 @@
           logoTextShow: true,
           headerBg: 'headerBg',
           Rules: {
-            company_name: [
-                        {required: true, message: '请输入企业名称', trigger: 'blur'},
-                        {min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur'}
-                    ],
                     username: [
-                        {required: true, message: '请输入用户名', trigger: 'blur'},
-                        {min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur'}
-                    ],
-                    company_legal: [
-                        {required: true, message: '请输入企业法人', trigger: 'blur'},
+                        {required: true, message: '请输入姓名', trigger: 'blur'},
                         {min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur'}
+                    ],
+                    sex: [
+                        {required: true, message: '请选择性别', trigger: 'blur'}
+                    ],
+                    phone: [
+                        {required: true, message: '请输入手机号码', trigger: 'blur'},
+                        {min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur'}
+                    ],
+                    academy: [
+                        {required: true, message: '请输入学院', trigger: 'blur'},
+                        {min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur'}
                     ],
                     password: [
                         {required: true, message: '请输入密码', trigger: 'blur'},
@@ -148,7 +141,7 @@
         }
       },
       created() {
-        if (localStorage.getItem("company")===null) this.$router.push('/')
+        if (localStorage.getItem("teacher")===null) this.$router.push('/')
         this.load()
       },
       methods: {
@@ -165,9 +158,9 @@
           }
         },
         load(){
-          this.request.get("/company/login",{
+          this.request.get("/teacher/login",{
             params: {
-              username: this.userinfo.username,
+              username: this.userinfo.t_id,
               password: this.userinfo.password,
             }
           }).then(res =>{
@@ -178,22 +171,7 @@
         edit(){
             this.$refs['Form'].validate((valid) => {
             if(valid){
-                this.$refs.upload.submit();
-            }
-            })
-        },
-        
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-            this.fileList = fileList;
-        },
-        handlePreview(file) {
-            console.log(file);
-        },
-        handleSuccessEdit(res) {
-            if (res !== null) {
-              this.form.company_licence = res;
-              this.request.post("/company/update",this.form).then(res =>{
+              this.request.post("/teacher/update",this.form).then(res =>{
                     if(res.code == 200){
                     this.$message.success("修改成功")
                     this.load()
@@ -202,14 +180,11 @@
                     }
                 })
             }
-        },
-        handleChange(file, fileList) {
-            console.log("change",file,fileList);
-            this.fileList = fileList;
+            })
         },
         logout(){
           this.$router.push('/')
-          localStorage.removeItem("company")
+          localStorage.removeItem("teaher")
           this.$message.success("退出成功")
         }
       }

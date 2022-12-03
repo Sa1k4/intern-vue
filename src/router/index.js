@@ -21,18 +21,28 @@ const routes = [
   },
   {
     path: '/adminT',
-    name: 'Admin',
+    name: 'AdminT',
     component: () => import('../views/Admin/AdminT.vue'),
   },
   {
     path: '/adminC',
-    name: 'Admin',
+    name: 'AdminC',
     component: () => import('../views/Admin/AdminC.vue'),
+  },
+  {
+    path: '/adminP',
+    name: 'AdminP',
+    component: () => import('../views/Admin/AdminProfession.vue'),
   },
   {
     path: '/student',
     name: 'Student',
     component: () => import('../views/Student/StudentInfo.vue'),
+  },
+  {
+    path: '/studentP',
+    name: 'StudentP',
+    component: () => import('../views/Student/StuProfession.vue'),
   },
   {
     path: '/company',
@@ -41,8 +51,13 @@ const routes = [
   },
   {
     path: '/companyP',
-    name: 'Company',
-    component: () => import('../views/Company/Profession.vue'),
+    name: 'CompanyP',
+    component: () => import('../views/Company/ComProfession.vue'),
+  },
+  {
+    path: '/teacher',
+    name: 'Teacher',
+    component: () => import('../views/Teacher/TeacherInfo.vue'),
   },
 ]
 

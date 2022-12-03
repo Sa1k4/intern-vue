@@ -50,7 +50,7 @@
         <el-main>
           <div style="margin-bottom: 30px">
             <el-breadcrumb separator="/">
-              <el-breadcrumb-item :to="{ path: '/student' }">主页</el-breadcrumb-item>
+              <el-breadcrumb-item :to="{ path: '/company' }">主页</el-breadcrumb-item>
               <el-breadcrumb-item>企业岗位管理</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
@@ -275,6 +275,7 @@
             }
           }).then(res =>{
                     console.log(res.data)
+                    this.pageNum = 1
                     this.tableData = res.data.data
                     this.total = res.data.total
                   })
@@ -376,6 +377,7 @@
             params: {
               pageNum: pageNum,
               pageSize: this.pageSize,
+              com_id: this.userinfo.cpmy_id,
               name: this.name,
               status: this.status
             }

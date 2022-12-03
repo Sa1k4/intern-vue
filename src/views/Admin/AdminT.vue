@@ -27,7 +27,11 @@
                 <i class="el-icon-school"></i>
                 <span slot="title">企业信息管理</span>
             </el-menu-item>
-  
+            <el-menu-item index="/adminP">
+                <i class="el-icon-s-cooperation"></i>
+                <span slot="title">企业岗位审核</span>
+            </el-menu-item>
+            
         </el-menu>
       </el-aside>
   
