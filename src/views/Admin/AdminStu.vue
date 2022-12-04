@@ -85,11 +85,11 @@
           <el-table :data="tableData" border stripe :header-cell-class-name="headerBg" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55">
             </el-table-column>
-            <el-table-column prop="stu_id" label="学号" width="140">
+            <el-table-column prop="stu_id" label="学号" width="100">
             </el-table-column>
-            <el-table-column prop="username" label="姓名" width="120">
+            <el-table-column prop="username" label="姓名" width="100">
             </el-table-column>
-            <el-table-column prop="sex" label="性别">
+            <el-table-column prop="sex" label="性别"  width="50">
             </el-table-column>
             <el-table-column prop="phone" label="电话">
             </el-table-column>
@@ -98,6 +98,13 @@
             <el-table-column prop="classname" label="班级">
             </el-table-column>
             <el-table-column prop="academy" label="学院">
+            </el-table-column>
+            <el-table-column prop="vitae" label="简历" width="110">
+              <template slot-scope="scope">
+                <a :href="('http://localhost:8081/file/download?url='+scope.row.vitae)" v-if="scope.row.vitae!=null" >
+                <el-button type="primary">查看文件</el-button>
+                </a>
+              </template>
             </el-table-column>
             <el-table-column prop="password" label="密码">
             </el-table-column>
@@ -235,7 +242,7 @@
           studentRules: {
                     stu_id: [
                         {required: true, message: '请输入学号', trigger: 'blur'},
-                        {min: 3, max: 12, message: '长度在 3 到 12 个字符', trigger: 'blur'}
+                        {min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'}
                     ],
                     username: [
                         {required: true, message: '请输入姓名', trigger: 'blur'},
@@ -364,7 +371,25 @@
           this.request.delete("/student/delete"+id).then(res =>{
             if(res.code == 200){
               this.$message.success("删除成功")
-              this.load()
+              
+              this.request.get("/student/page",{
+            params: {
+              pageNum: this.pageNum,
+              pageSize: this.pageSize,
+              username: this.student_name,
+              classname: this.student_class,
+              stu_id: this.student_id
+            }
+          }).then(res =>{
+                    console.log(res.data)
+                    let realPage = Math.ceil(res.data.total/this.pageSize);
+                    if(realPage == 0)this.pageNum = 1;
+                    else
+                    if(res.data.data.length==0)this.pageNum=realPage;
+                    else this.pageNum = pageNum;
+                    this.load();
+                  })
+
             }else {
               this.$message.error("删除失败")
             }
@@ -375,7 +400,25 @@
           this.request.post("/student/deleteMultiple", ids).then(res =>{
             if(res.code == 200){
               this.$message.success("删除成功")
-              this.load()
+              
+              this.request.get("/student/page",{
+            params: {
+              pageNum: this.pageNum,
+              pageSize: this.pageSize,
+              username: this.student_name,
+              classname: this.student_class,
+              stu_id: this.student_id
+            }
+          }).then(res =>{
+                    console.log(res.data)
+                    let realPage = Math.ceil(res.data.total/this.pageSize);
+                    if(realPage == 0)this.pageNum = 1;
+                    else
+                    if(res.data.data.length==0)this.pageNum=realPage;
+                    else this.pageNum = pageNum;
+                    this.load();
+                  })
+
             }else {
               this.$message.error("删除失败")
             }

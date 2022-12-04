@@ -25,8 +25,8 @@
                 <i class="el-icon-s-cooperation"></i>
                 <span>岗位申请</span>
               </template>
-              <el-menu-item index="/studentP" style="color:#39c5bb">可申请岗位</el-menu-item>
-              <el-menu-item index="/studentP1">申请中岗位</el-menu-item>
+              <el-menu-item index="/studentP">可申请岗位</el-menu-item>
+              <el-menu-item index="/studentP1" style="color:#39c5bb">申请中岗位</el-menu-item>
               <el-menu-item index="/studentP2">申请失败岗位</el-menu-item>
             </el-submenu>
             <el-submenu index="/2">
@@ -67,7 +67,7 @@
           <div style="margin-bottom: 30px">
             <el-breadcrumb separator="/">
               <el-breadcrumb-item :to="{ path: '/student' }">主页</el-breadcrumb-item>
-              <el-breadcrumb-item>可申请岗位</el-breadcrumb-item>
+              <el-breadcrumb-item>申请中岗位</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
   
@@ -78,7 +78,7 @@
           </div>
   
       <el-tabs v-model="activeName">
-        <el-tab-pane label="可申请岗位" name="tab1">  
+        <el-tab-pane label="申请中岗位" name="tab1">  
   
           <el-table :data="tableData" border stripe :header-cell-class-name="headerBg">
             <!-- <el-table-column type="selection" width="55">
@@ -105,7 +105,7 @@
             <el-table-column label="操作"  width="300" align="center">
               <template slot-scope="scope">
                 <el-button v-if="(scope.row.status==1||scope.row.status==2)" type="primary" @click="detail(scope.row.id)">查看公司 <i class="el-icon-search"></i></el-button>   
-                <el-button v-if="(scope.row.status==1)" type="success" @click="apply(scope.row.id)">申请岗位 <i class="el-icon-tickets"></i></el-button>
+                <!-- <el-button v-if="(scope.row.status==1)" type="success" @click="apply(scope.row.id)">申请岗位 <i class="el-icon-tickets"></i></el-button> -->
               </template>
             </el-table-column>
           </el-table>
@@ -186,7 +186,7 @@
           }
         },
         load(){
-          this.request.get("/profession/selectPfToPsNotPsProId",{
+          this.request.get("/profession/selectPsOf0",{
             params: {
               pageNum: this.pageNum,
               pageSize: this.pageSize,
@@ -200,7 +200,7 @@
                   })
         },
         search(){
-          this.request.get("/profession/selectPfToPsNotPsProId",{
+          this.request.get("/profession/selectPsOf0",{
             params: {
               pageNum: 1,
               pageSize: this.pageSize,
@@ -250,7 +250,7 @@
           this.load()
         },
         handleCurrentChange(pageNum){
-          this.request.get("/profession/selectPfToPsNotPsProId",{
+          this.request.get("/profession/selectPsOf0",{
             params: {
               pageNum: pageNum,
               pageSize: this.pageSize,

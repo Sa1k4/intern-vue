@@ -6,6 +6,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 import './assets/global.css'
 import request from "@/utils/request";
 
+import UrlEncode from './utils/UrlEncode.js' 
+Vue.prototype.$UrlEncode = UrlEncode;
+
 Vue.config.productionTip = false
 
 Vue.use(ElementUI, { size: "mini" });
