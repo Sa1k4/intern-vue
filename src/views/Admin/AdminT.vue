@@ -88,7 +88,7 @@
             </el-table-column>
             <el-table-column prop="username" label="姓名" width="120">
             </el-table-column>
-            <el-table-column prop="sex" label="性别">
+            <el-table-column prop="sex" label="性别" width="50">
             </el-table-column>
             <el-table-column prop="phone" label="电话">
             </el-table-column>
@@ -217,7 +217,7 @@
           Rules: {
                     t_id: [
                         {required: true, message: '请输入工号', trigger: 'blur'},
-                        {min: 3, max: 12, message: '长度在 3 到 12 个字符', trigger: 'blur'}
+                        {min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'}
                     ],
                     username: [
                         {required: true, message: '请输入姓名', trigger: 'blur'},
@@ -334,7 +334,24 @@
           this.request.delete("/teacher/delete"+id).then(res =>{
             if(res.code == 200){
               this.$message.success("删除成功")
-              this.load()
+              
+              this.request.get("/teacher/select",{
+            params: {
+              pageNum: this.pageNum,
+              pageSize: this.pageSize,
+              username: this.username,
+              academy: this.academy
+            }
+          }).then(res =>{
+                    console.log(res.data)
+                    let realPage = Math.ceil(res.data.total/this.pageSize);
+                    if(realPage == 0)this.pageNum = 1;
+                    else
+                    if(res.data.data.length==0)this.pageNum=realPage;
+                    else this.pageNum = pageNum;
+                    this.load();
+                  })
+
             }else {
               this.$message.error("删除失败")
             }
@@ -345,7 +362,24 @@
           this.request.post("/teacher/deleteMultiple", ids).then(res =>{
             if(res.code == 200){
               this.$message.success("删除成功")
-              this.load()
+              
+              this.request.get("/teacher/select",{
+            params: {
+              pageNum: this.pageNum,
+              pageSize: this.pageSize,
+              username: this.username,
+              academy: this.academy
+            }
+          }).then(res =>{
+                    console.log(res.data)
+                    let realPage = Math.ceil(res.data.total/this.pageSize);
+                    if(realPage == 0)this.pageNum = 1;
+                    else
+                    if(res.data.data.length==0)this.pageNum=realPage;
+                    else this.pageNum = pageNum;
+                    this.load();
+                  })
+
             }else {
               this.$message.error("删除失败")
             }

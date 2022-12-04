@@ -73,7 +73,7 @@
           </div>
 
   
-          <el-table :data="tableData" border stripe :header-cell-class-name="headerBg" @selection-change="handleSelectionChange">
+          <el-table :data="tableData" border stripe :header-cell-class-name="headerBg">
             <!-- <el-table-column type="selection" width="55">
             </el-table-column> -->
             <!-- <el-table-column prop="id" label="岗位编号" width="100" >
@@ -95,32 +95,14 @@
               </template>
             </el-table-column>
             
-            <el-table-column label="操作"  width="400" align="center">
+            <el-table-column label="操作"  width="350" align="center">
               <template slot-scope="scope">
                 <el-button type="primary" @click="detail(scope.row.id)">查看公司 <i class="el-icon-search"></i></el-button>
-                
-                <el-popconfirm
-                        class="ml-5"
-                        confirm-button-text='好的'
-                        cancel-button-text='不用了'
-                        icon="el-icon-info"
-                        icon-color="red"
-                        title="确定审核不通过吗？"
-                        @confirm="changeStatusF(scope.row)"
-                >
-                <el-button v-if="(scope.row.status==0)" type="danger" slot="reference">审核不通过 <i class="el-icon-circle-close"></i></el-button>
-                </el-popconfirm>
-                <el-popconfirm
-                        class="ml-5"
-                        confirm-button-text='好的'
-                        cancel-button-text='不用了'
-                        icon="el-icon-info"
-                        icon-color="red"
-                        title="确定审核通过吗？"
-                        @confirm="changeStatusT(scope.row)"
-                >
-                <el-button v-if="(scope.row.status==0)" type="success" slot="reference">审核通过 <i class="el-icon-circle-check"></i></el-button>
-                </el-popconfirm>
+
+                <el-button v-if="(scope.row.status==0)" type="danger" slot="reference" @click="changeStatusF(scope.row)">审核不通过 <i class="el-icon-circle-close"></i></el-button>
+
+                <el-button v-if="(scope.row.status==0||scope.row.status==3)" type="success" slot="reference" @click="changeStatusT(scope.row)">审核通过 <i class="el-icon-circle-check"></i></el-button>
+               
               </template>
             </el-table-column>
           </el-table>
@@ -136,6 +118,20 @@
             </el-pagination>
           </div>
   
+          <el-dialog title="企业信息" :visible.sync="dialogFormVisible" width="35%">
+            <el-form size="small" :model="form">
+              <el-form-item label="企业名称:" prop="company_name">
+                <el-input v-model="form.company_name" autocomplete="off" readonly></el-input>
+              </el-form-item>
+              <el-form-item label="企业介绍:" prop="company_legal">
+                <el-input type="textarea" :autosize="{ minRows: 15, maxRows: 15}" v-model="form.company_legal" autocomplete="off" readonly></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">关 闭</el-button>     
+            </div>
+          </el-dialog>
+
         </el-main>
   
       </el-container>
@@ -161,6 +157,8 @@
           sideWidth: 200,
           logoTextShow: true,
           headerBg: 'headerBg',    
+          dialogFormVisible: false,
+          form:{},
         }
       },
       created() {
@@ -211,7 +209,15 @@
         },
         
         detail(res) {
-          
+          this.dialogFormVisible = true
+          this.request.get("/company/selectOfCompany",{
+            params: {
+              id: res
+            }
+          }).then(res =>{
+                    console.log(res)
+                    this.form = res.data.company
+                  })
         },
         changeStatusT(res) {
             res.status=1

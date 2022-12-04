@@ -23,10 +23,6 @@
                 <i class="el-icon-s-cooperation"></i>
                 <span slot="title">企业岗位管理</span>
             </el-menu-item>
-            <el-menu-item index="/">
-                <i class="el-icon-s-order"></i>
-                <span slot="title">评价</span>
-            </el-menu-item>
   
         </el-menu>
       </el-aside>
@@ -87,8 +83,8 @@
                 <el-input v-model="form.company_name" autocomplete="off"></el-input>
               </el-form-item>
           
-              <el-form-item label="企业法人:" prop="company_legal">
-                <el-input v-model="form.company_legal" autocomplete="off"></el-input>
+              <el-form-item label="企业介绍:" prop="company_legal">
+                <el-input type="textarea" :autosize="{ minRows: 15, maxRows: 15}" v-model="form.company_legal" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item label="用户名:" prop="username">
                 <el-input v-model="form.username" autocomplete="off"></el-input>
@@ -133,8 +129,8 @@
                         {min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur'}
                     ],
                     company_legal: [
-                        {required: true, message: '请输入企业法人', trigger: 'blur'},
-                        {min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur'}
+                        {required: true, message: '请输入企业介绍', trigger: 'blur'},
+                        
                     ],
                     password: [
                         {required: true, message: '请输入密码', trigger: 'blur'},

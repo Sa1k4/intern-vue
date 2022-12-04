@@ -23,10 +23,6 @@
                 <i class="el-icon-s-cooperation"></i>
                 <span slot="title">企业岗位管理</span>
             </el-menu-item>
-            <el-menu-item index="/">
-                <i class="el-icon-s-order"></i>
-                <span slot="title">评价</span>
-            </el-menu-item>
   
         </el-menu>
       </el-aside>
@@ -107,7 +103,7 @@
             
             <el-table-column label="操作"  width="300" align="center">
               <template slot-scope="scope">
-                <el-button v-if="(scope.row.status==1||scope.row.status==2)" type="primary" @click="detail(scope.row.id)">查看 <i class="el-icon-search"></i></el-button>
+                <el-button v-if="(scope.row.status==1||scope.row.status==2)" type="primary" @click="detail(scope.row)">查看 <i class="el-icon-search"></i></el-button>
                 <el-button v-if="(scope.row.status==0||scope.row.status==3)" type="success" @click="handleEdit(scope.row)">编辑 <i class="el-icon-edit"></i></el-button>
                 <el-button v-if="(scope.row.status==3)" type="primary" @click="changeStatus(scope.row)">重新申请 <i class="el-icon-tickets"></i></el-button>
                 <el-button v-if="(scope.row.status==1)" type="warning" @click="changeStatus(scope.row)">关闭 <i class="el-icon-circle-close"></i></el-button>
@@ -188,6 +184,8 @@
   </template>
   
   <script>
+import { json } from 'body-parser'
+
 
   
     export default {
@@ -332,7 +330,25 @@
           this.request.delete("/profession/delProfession"+id).then(res =>{
             if(res.code == 200){
               this.$message.success("删除成功")
-              this.load()
+              
+              this.request.get("/profession/conditionQuery",{
+            params: {
+              pageNum: this.pageNum,
+              pageSize: this.pageSize,
+              com_id: this.userinfo.cpmy_id,
+              name: this.name,
+              status: this.status
+            }
+          }).then(res =>{
+                    console.log(res.data)
+                    let realPage = Math.ceil(res.data.total/this.pageSize);
+                    if(realPage == 0)this.pageNum = 1;
+                    else
+                    if(res.data.data.length==0)this.pageNum=realPage;
+                    else this.pageNum = pageNum;
+                    this.load();
+                  })
+
             }else {
               this.$message.error("删除失败")
             }
@@ -343,7 +359,25 @@
           this.request.post("/profession/deleteMultiple", ids).then(res =>{
             if(res.code == 200){
               this.$message.success("删除成功")
-              this.load()
+              
+              this.request.get("/profession/conditionQuery",{
+            params: {
+              pageNum: this.pageNum,
+              pageSize: this.pageSize,
+              com_id: this.userinfo.cpmy_id,
+              name: this.name,
+              status: this.status
+            }
+          }).then(res =>{
+                    console.log(res.data)
+                    let realPage = Math.ceil(res.data.total/this.pageSize);
+                    if(realPage == 0)this.pageNum = 1;
+                    else
+                    if(res.data.data.length==0)this.pageNum=realPage;
+                    else this.pageNum = pageNum;
+                    this.load();
+                  })
+
             }else {
               this.$message.error("删除失败")
             }
@@ -390,6 +424,17 @@
                     else this.pageNum = pageNum;
                     this.load();
                   })
+        },
+        detail(res) {
+          this.$router.push({
+            path:'/companyS',
+            query: {
+              key:this.$UrlEncode.encode(JSON.stringify({
+                name: res.name,
+                id: res.id
+              }))
+            }
+          })
         },
         logout(){
           this.$router.push('/')

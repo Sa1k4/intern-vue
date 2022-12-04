@@ -83,20 +83,22 @@
           <el-table :data="tableData" border stripe :header-cell-class-name="headerBg" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55">
             </el-table-column>
-            <el-table-column prop="company_name" label="公司名称" width="250">
+            <el-table-column prop="company_name" label="公司名称" width="150">
             </el-table-column>
-            <el-table-column prop="company_legal" label="公司介绍" width="150">
+            <el-table-column prop="company_legal" label="公司介绍">
             </el-table-column>
-            <el-table-column prop="company_licence" label="公司凭证" width="150">
+            <el-table-column prop="company_licence" label="公司凭证" width="110">
               <template slot-scope="scope">
-                <el-button class="ml-5" type="primary" @click="download(scope.row.company_licence)">下载</el-button>
+                <a :href="('http://localhost:8081/file/download?url='+scope.row.company_licence)" v-if="scope.row.company_licence!=null" >
+                <el-button type="success">查看文件</el-button>
+                </a>
               </template>
             </el-table-column>
-            <el-table-column prop="username" label="公司账号">
+            <el-table-column prop="username" label="公司账号" width="100">
             </el-table-column>
-            <el-table-column prop="password" label="密码">
+            <el-table-column prop="password" label="密码" width="100">
             </el-table-column>
-            <el-table-column label="操作"  width="200" align="center">
+            <el-table-column label="操作"  width="100" align="center">
               <template slot-scope="scope">
                 <el-popconfirm
                         class="ml-5"
@@ -202,7 +204,23 @@
           this.request.delete("/company/delete"+id).then(res =>{
             if(res.code == 200){
               this.$message.success("删除成功")
-              this.load()
+              
+              this.request.get("/company/select",{
+            params: {
+              pageNum: this.pageNum,
+              pageSize: this.pageSize,
+              company_name: this.company_name
+            }
+          }).then(res =>{
+                    console.log(res.data)
+                    let realPage = Math.ceil(res.data.total/this.pageSize);
+                    if(realPage == 0)this.pageNum = 1;
+                    else
+                    if(res.data.data.length==0)this.pageNum=realPage;
+                    else this.pageNum = pageNum;
+                    this.load();
+                  })
+
             }else {
               this.$message.error("删除失败")
             }
@@ -213,7 +231,23 @@
           this.request.post("/company/deleteMultiple", ids).then(res =>{
             if(res.code == 200){
               this.$message.success("删除成功")
-              this.load()
+              
+              this.request.get("/company/select",{
+            params: {
+              pageNum: this.pageNum,
+              pageSize: this.pageSize,
+              company_name: this.company_name
+            }
+          }).then(res =>{
+                    console.log(res.data)
+                    let realPage = Math.ceil(res.data.total/this.pageSize);
+                    if(realPage == 0)this.pageNum = 1;
+                    else
+                    if(res.data.data.length==0)this.pageNum=realPage;
+                    else this.pageNum = pageNum;
+                    this.load();
+                  })
+
             }else {
               this.$message.error("删除失败")
             }
@@ -248,26 +282,6 @@
                     else this.pageNum = pageNum;
                     this.load();
                   })
-        },
-        download(company_licence){
-          window.open("http://localhost:8081/file/download?url="+company_licence)
-          // console.log(company_licence)
-          // this.request.get("/file/download",{
-          //   responseType: "blob",
-          //   params: {
-          //     url:company_licence
-          //   }
-          // }).then(res =>{
-          //   console.log(res)
-          //   let url = URL.createObjectURL(res);
-          //   var a = document.createElement("a");
-          //   a.href = url; // 给a标签赋上下载地址
-          //   a.download = `${name}`;
-          //   a.style.display = "none"; // 让a标签不显示
-          //   a.click(); // a标签自点击
-          //   URL.revokeObjectURL(a.href);
-          // })
-          // .catch((_) => {});
         },
         logout(){
           this.$router.push('/')

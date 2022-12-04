@@ -45,6 +45,16 @@ const routes = [
     component: () => import('../views/Student/StuProfession.vue'),
   },
   {
+    path: '/studentP1',
+    name: 'StudentP1',
+    component: () => import('../views/Student/StuProfession1.vue'),
+  },
+  {
+    path: '/studentP2',
+    name: 'StudentP2',
+    component: () => import('../views/Student/StuProfession2.vue'),
+  },
+  {
     path: '/company',
     name: 'Company',
     component: () => import('../views/Company/CompanyInfo.vue'),
@@ -53,6 +63,11 @@ const routes = [
     path: '/companyP',
     name: 'CompanyP',
     component: () => import('../views/Company/ComProfession.vue'),
+  },
+  {
+    path: '/companyS',
+    name: 'CompanyS',
+    component: () => import('../views/Company/ComStu.vue'),
   },
   {
     path: '/teacher',
