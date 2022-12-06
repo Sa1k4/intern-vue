@@ -65,7 +65,7 @@
 
         <el-tabs v-model="activeName">
 
-        <el-tab-pane label="申请中的学生" name="tab">
+        <el-tab-pane label="请假申请" name="tab">
         <div style="margin: 10px 0">
           <el-input style="width: 200px" placeholder="请输入学生姓名" suffix-icon="el-icon-search" class="ml-5" v-model="student_name"></el-input>
           <el-button class="ml-5" type="primary" @click="search">搜索</el-button>
@@ -164,7 +164,7 @@
         </div>
         </el-tab-pane>
 
-        <el-tab-pane label="已通过申请的学生" name="tab1"> 
+        <el-tab-pane label="通过的请假申请" name="tab1"> 
         <div style="margin: 10px 0">
           <el-input style="width: 200px" placeholder="请输入学生姓名" suffix-icon="el-icon-search" class="ml-5" v-model="student_name1"></el-input>
           <el-button class="ml-5" type="primary" @click="search1">搜索</el-button>
@@ -256,7 +256,7 @@
         </div>
         </el-tab-pane>
 
-        <el-tab-pane label="未通过申请的学生" name="tab2"> 
+        <el-tab-pane label="未通过的请假申请" name="tab2"> 
         <div style="margin: 10px 0">
           <el-input style="width: 200px" placeholder="请输入学生姓名" suffix-icon="el-icon-search" class="ml-5" v-model="student_name2"></el-input>
           <el-button class="ml-5" type="primary" @click="search2">搜索</el-button>
