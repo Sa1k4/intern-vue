@@ -20,7 +20,7 @@
                 <i class="el-icon-user"></i>
                 <span slot="title">个人信息</span>
             </el-menu-item>
-            <el-submenu index="/1" v-if="(formPro==null)">
+            <el-submenu index="/1" v-if="(formPro==null&userinfo.apply==2)">
               <template slot="title">
                 <i class="el-icon-s-cooperation"></i>
                 <span>岗位申请</span>
@@ -29,17 +29,17 @@
               <el-menu-item index="/studentP1">申请中岗位</el-menu-item>
               <el-menu-item index="/studentP2">申请失败岗位</el-menu-item>
             </el-submenu>
-            <el-submenu index="/2">
+            <el-submenu index="/2" v-if="(userinfo.apply==2)">
               <template slot="title">
                 <i class="el-icon-menu"></i>
                 <span>我的实习</span>
               </template>
-              <el-menu-item index="/">实习请假申请</el-menu-item>
-              <el-menu-item index="/">实习周报</el-menu-item>
-              <el-menu-item index="/">实习计划</el-menu-item>
-              <el-menu-item index="/">实习报告</el-menu-item>
+              <el-menu-item index="/studentR1">实习请假申请</el-menu-item>
+              <el-menu-item index="/studentR2">实习周报</el-menu-item>
+              <el-menu-item index="/studentR3">实习计划</el-menu-item>
+              <el-menu-item index="/studentR4">实习报告</el-menu-item>
             </el-submenu>
-            <el-menu-item index="/">
+            <el-menu-item index="/studentE">
                 <i class="el-icon-s-order"></i>
                 <span slot="title">我的评价</span>
             </el-menu-item>
@@ -74,7 +74,7 @@
           <el-tabs v-model="activeName">
           <el-tab-pane label="我的信息" name="tab1">  
           
-          <div v-if="(form.apply==0)" style="margin: 10px 0; margin-top: 30px;color: red;">您还未进行实习申请！</div>
+          <div v-if="(form.apply==0)" style="margin: 10px 0; margin-top: 30px;color: red;">您还未通过实习申请！</div>
           <el-button v-if="(form.apply==0)" size="small" type="success" @click="apply()">申请</el-button>
           <div v-if="(form.apply==1)" style="margin: 10px 0; margin-top: 30px;color: orange;">您已进行实习申请，请等待老师审核</div>
           <div v-if="(form.apply==2)" style="margin: 10px 0; margin-top: 30px;color: green;">您已通过实习申请</div>

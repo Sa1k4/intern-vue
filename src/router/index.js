@@ -55,6 +55,31 @@ const routes = [
     component: () => import('../views/Student/StuProfession2.vue'),
   },
   {
+    path: '/studentE',
+    name: 'StudentE',
+    component: () => import('../views/Student/StuEvaluate.vue'),
+  },
+  {
+    path: '/studentR1',
+    name: 'StudentR1',
+    component: () => import('../views/Student/StuR1.vue'),
+  },
+  {
+    path: '/studentR2',
+    name: 'StudentR2',
+    component: () => import('../views/Student/StuR2.vue'),
+  },
+  {
+    path: '/studentR3',
+    name: 'StudentR3',
+    component: () => import('../views/Student/StuR3.vue'),
+  },
+  {
+    path: '/studentR4',
+    name: 'StudentR4',
+    component: () => import('../views/Student/StuR4.vue'),
+  },
+  {
     path: '/company',
     name: 'Company',
     component: () => import('../views/Company/CompanyInfo.vue'),
@@ -73,6 +98,31 @@ const routes = [
     path: '/teacher',
     name: 'Teacher',
     component: () => import('../views/Teacher/TeacherInfo.vue'),
+  },
+  {
+    path: '/teacherA1',
+    name: 'TeacherA1',
+    component: () => import('../views/Teacher/TeacherA1.vue'),
+  },
+  {
+    path: '/teacherA2',
+    name: 'TeacherA2',
+    component: () => import('../views/Teacher/TeacherA2.vue'),
+  },
+  {
+    path: '/teacherSD',
+    name: 'TeacherSD',
+    component: () => import('../views/Teacher/TeacherSD.vue'),
+  },
+  {
+    path: '/teacherSM',
+    name: 'TeacherSM',
+    component: () => import('../views/Teacher/TeacherSM.vue'),
+  },
+  {
+    path: '/teacherSA',
+    name: 'TeacherSA',
+    component: () => import('../views/Teacher/TeacherSA.vue'),
   },
 ]
 

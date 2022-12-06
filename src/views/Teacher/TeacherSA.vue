@@ -15,23 +15,26 @@
             <b style="color: white" v-show="logoTextShow">大学生实习管理系统</b>
           </div>
   
-            <el-menu-item index="/admin">
+            <el-menu-item index="/teacher">
                 <i class="el-icon-user"></i>
-                <span slot="title">学生信息管理</span>
+                <span slot="title">个人信息</span>
             </el-menu-item>
-            <el-menu-item index="/adminT">
-                <i class="el-icon-s-custom"></i>
-                <span slot="title">教师信息管理</span>
-            </el-menu-item>
-            <el-menu-item index="/adminC" style="color:#39c5bb">
-                <i class="el-icon-school"></i>
-                <span slot="title">企业信息管理</span>
-            </el-menu-item>
-            <el-menu-item index="/adminP">
-                <i class="el-icon-s-cooperation"></i>
-                <span slot="title">企业岗位审核</span>
-            </el-menu-item>
-  
+            <el-submenu index="/1">
+              <template slot="title">
+                <i class="el-icon-tickets"></i>
+                <span>审批</span>
+              </template>
+              <el-menu-item index="/teacherA1">学生实习审批</el-menu-item>
+              <el-menu-item index="/teacherA2">学生实习请假审批</el-menu-item>
+            </el-submenu>
+            <el-submenu index="/2">
+              <template slot="title">
+                <i class="el-icon-menu"></i>
+                <span>学生管理</span>
+              </template>
+              <el-menu-item index="/teacherSM">学生信息查看</el-menu-item>
+              <el-menu-item index="/teacherSA" style="color:#39c5bb">学生添加</el-menu-item>
+            </el-submenu>
         </el-menu>
       </el-aside>
   
@@ -54,63 +57,62 @@
         <el-main>
           <div style="margin-bottom: 30px">
             <el-breadcrumb separator="/">
-              <el-breadcrumb-item :to="{ path: '/admin' }">后台管理</el-breadcrumb-item>
-              <el-breadcrumb-item>企业管理</el-breadcrumb-item>
+              <el-breadcrumb-item :to="{ path: '/teacher' }">主页</el-breadcrumb-item>
+              <el-breadcrumb-item>学生添加</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
-  
+          
           <div style="margin: 10px 0">
-            <el-input style="width: 200px" placeholder="请输入公司名称" suffix-icon="el-icon-position" class="ml-5" v-model="company_name"></el-input>
+            <el-input style="width: 200px" placeholder="请输入学生学号" suffix-icon="el-icon-position" class="ml-5" v-model="student_id"></el-input>
+            <el-input style="width: 200px" placeholder="请输入学生姓名" suffix-icon="el-icon-search" class="ml-5" v-model="student_name"></el-input>
+            <el-input style="width: 200px" placeholder="请输入学生班级" suffix-icon="el-icon-message" class="ml-5" v-model="student_class"></el-input>
             <el-button class="ml-5" type="primary" @click="search">搜索</el-button>
             <el-button class="ml-5" type="warning" @click="reset">重置</el-button>
           </div>
   
           <div style="margin: 10px 0">
-            
             <el-popconfirm
                     class="ml-5"
                     confirm-button-text='好的'
                     cancel-button-text='不用了'
                     icon="el-icon-info"
                     icon-color="red"
-                    title="确定批量删除吗？"
-                    @confirm="delMultiple"
+                    title="确定批量添加吗？"
+                    @confirm="addMultiple"
             >
-            <el-button type="danger" slot="reference">批量删除 <i class="el-icon-remove-outline"></i></el-button>
+            <el-button type="success" slot="reference">批量添加 <i class="el-icon-circle-plus-outline"></i></el-button>
             </el-popconfirm>
           </div>
   
           <el-table :data="tableData" border stripe :header-cell-class-name="headerBg" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55">
             </el-table-column>
-            <el-table-column prop="company_name" label="公司名称" width="150">
+            <el-table-column prop="stu_id" label="学号" width="100">
             </el-table-column>
-            <el-table-column prop="company_legal" label="公司介绍">
+            <el-table-column prop="username" label="姓名" width="100">
             </el-table-column>
-            <el-table-column prop="company_licence" label="公司凭证" width="110">
+            <el-table-column prop="sex" label="性别"  width="50">
+            </el-table-column>
+            <el-table-column prop="phone" label="电话">
+            </el-table-column>
+            <el-table-column prop="specialty" label="专业">
+            </el-table-column>
+            <el-table-column prop="classname" label="班级">
+            </el-table-column>
+            <el-table-column prop="academy" label="学院">
+            </el-table-column>
+            <el-table-column prop="vitae" label="简历" width="110">
               <template slot-scope="scope">
-                <a :href="('http://localhost:8081/file/download?url='+scope.row.company_licence)" v-if="scope.row.company_licence!=null" >
-                <el-button type="success">查看文件</el-button>
+                <a :href="('http://localhost:8081/file/download?url='+scope.row.vitae)" v-if="scope.row.vitae!=null" >
+                <el-button type="primary">查看文件</el-button>
                 </a>
               </template>
             </el-table-column>
-            <el-table-column prop="username" label="公司账号" width="100">
+            <el-table-column prop="password" label="密码">
             </el-table-column>
-            <el-table-column prop="password" label="密码" width="100">
-            </el-table-column>
-            <el-table-column label="操作"  width="100" align="center">
+            <el-table-column label="操作"  width="200" align="center">
               <template slot-scope="scope">
-                <el-popconfirm
-                        class="ml-5"
-                        confirm-button-text='好的'
-                        cancel-button-text='不用了'
-                        icon="el-icon-info"
-                        icon-color="red"
-                        title="确定删除吗？"
-                        @confirm="del(scope.row.cpmy_id)"
-                >
-                <el-button type="danger" slot="reference">删除 <i class="el-icon-remove-outline"></i></el-button>
-                </el-popconfirm>
+                <el-button type="success" @click="add(scope.row.stu_id)">添加 <i class="el-icon-plus"></i></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -125,7 +127,6 @@
                     :total="total">
             </el-pagination>
           </div>
-  
           
   
         </el-main>
@@ -141,13 +142,14 @@
       name: 'Home',
       data() {
         return {
-          userinfo:localStorage.getItem("admin")? JSON.parse(localStorage.getItem("admin")) :"",
+          userinfo:localStorage.getItem("teacher")? JSON.parse(localStorage.getItem("teacher")) :"",
           tableData: [],
           total: 0,
           pageNum:1,
           pageSize:5,
-          company_name:"",
-          form:{},
+          student_name: "",
+          student_class: "",
+          student_id: "",
           multipleSelection: [],
           collapseBtnClass: 'el-icon-s-fold',
           isCollapse: false,
@@ -157,7 +159,7 @@
         }
       },
       created() {
-        if (localStorage.getItem("admin")===null) this.$router.push('/')
+        if (localStorage.getItem("teacher")===null) this.$router.push('/')
         this.load()
       },
       methods: {
@@ -174,11 +176,14 @@
           }
         },
         load(){
-          this.request.get("/company/select",{
+          this.request.get("/teacher/findStudentF",{
             params: {
+              t_id: this.userinfo.t_id,
               pageNum: this.pageNum,
               pageSize: this.pageSize,
-              company_name: this.company_name
+              student_name: this.student_name,
+              student_class: this.student_class,
+              student_id: this.student_id
             }
           }).then(res =>{
                     console.log(res.data)
@@ -187,11 +192,14 @@
                   })
         },
         search(){
-          this.request.get("/company/select",{
+          this.request.get("/teacher/findStudentF",{
             params: {
+              t_id: this.userinfo.t_id,
               pageNum: 1,
               pageSize: this.pageSize,
-              company_name: this.company_name
+              student_name: this.student_name,
+              student_class: this.student_class,
+              student_id: this.student_id
             }
           }).then(res =>{
                     console.log(res.data)
@@ -200,61 +208,10 @@
                     this.total = res.data.total
                   })
         },
-        del(id){
-          this.request.delete("/company/delete"+id).then(res =>{
-            if(res.code == 200){
-              this.$message.success("删除成功")
-              
-              this.request.get("/company/select",{
-            params: {
-              pageNum: this.pageNum,
-              pageSize: this.pageSize,
-              company_name: this.company_name
-            }
-          }).then(res =>{
-                    console.log(res.data)
-                    let realPage = Math.ceil(res.data.total/this.pageSize);
-                    if(realPage == 0)this.pageNum = 1;
-                    else
-                    if(res.data.data.length==0)this.pageNum=realPage;
-                    else this.pageNum = this.pageNum;
-                    this.load();
-                  })
-
-            }else {
-              this.$message.error("删除失败")
-            }
-          })
-        },
-        delMultiple(){
-          let ids = this.multipleSelection.map(v => v.cpmy_id)
-          this.request.post("/company/deleteMultiple", ids).then(res =>{
-            if(res.code == 200){
-              this.$message.success("删除成功")
-              
-              this.request.get("/company/select",{
-            params: {
-              pageNum: this.pageNum,
-              pageSize: this.pageSize,
-              company_name: this.company_name
-            }
-          }).then(res =>{
-                    console.log(res.data)
-                    let realPage = Math.ceil(res.data.total/this.pageSize);
-                    if(realPage == 0)this.pageNum = 1;
-                    else
-                    if(res.data.data.length==0)this.pageNum=realPage;
-                    else this.pageNum = this.pageNum;
-                    this.load();
-                  })
-
-            }else {
-              this.$message.error("删除失败")
-            }
-          })
-        },
         reset(){
-          this.company_name=""
+          this.student_id=""
+          this.student_name=""
+          this.student_class=""
           this.pageNum=1
           this.load()
         },
@@ -267,11 +224,14 @@
           this.load()
         },
         handleCurrentChange(pageNum){
-          this.request.get("/company/select",{
+          this.request.get("/teacher/findStudentF",{
             params: {
+              t_id: this.userinfo.t_id,
               pageNum: pageNum,
               pageSize: this.pageSize,
-              company_name: this.company_name
+              student_name: this.student_name,
+              student_class: this.student_class,
+              student_id: this.student_id
             }
           }).then(res =>{
                     console.log(res.data)
@@ -283,9 +243,73 @@
                     this.load();
                   })
         },
+
+        add(id){
+          this.request.get("/teacher/addStudent",{
+            params:{
+              t_id:this.userinfo.t_id,
+              stu_id:id
+            }
+          }).then(res =>{
+            if(res.code == 200){
+              this.$message.success("添加成功")
+
+              this.request.get("/teacher/findStudentF",{
+            params: {
+              t_id: this.userinfo.t_id,
+              pageNum: this.pageNum,
+              pageSize: this.pageSize,
+              student_name: this.student_name,
+              student_class: this.student_class,
+              student_id: this.student_id
+            }
+          }).then(res =>{
+                    console.log(res.data)
+                    let realPage = Math.ceil(res.data.total/this.pageSize);
+                    if(realPage == 0)this.pageNum = 1;
+                    else
+                    if(res.data.data.length==0)this.pageNum=realPage;
+                    else this.pageNum = this.pageNum;
+                    this.load();
+                  })
+            }else {
+              this.$message.error("添加失败")
+            }
+          })
+        },
+        addMultiple(){
+          let ids = this.multipleSelection.map(v => v.stu_id)
+          ids.push(this.userinfo.t_id)
+          console.log(ids)
+          this.request.post("/teacher/addStudentMultiple", ids).then(res =>{  
+            if(res.code == 200){
+              this.$message.success("添加成功")
+              this.request.get("/teacher/findStudentF",{
+            params: {
+              t_id: this.userinfo.t_id,
+              pageNum: this.pageNum,
+              pageSize: this.pageSize,
+              student_name: this.student_name,
+              student_class: this.student_class,
+              student_id: this.student_id
+            }
+          }).then(res =>{
+                    console.log(res.data)
+                    let realPage = Math.ceil(res.data.total/this.pageSize);
+                    if(realPage == 0)this.pageNum = 1;
+                    else
+                    if(res.data.data.length==0)this.pageNum=realPage;
+                    else this.pageNum = this.pageNum;
+                    this.load();
+                  })
+            }else {
+              this.$message.error("添加失败")
+            }
+          })
+        },
         logout(){
           this.$router.push('/')
-          localStorage.removeItem("admin")
+          localStorage.removeItem("teaher")
           this.$message.success("退出成功")
         }
       }

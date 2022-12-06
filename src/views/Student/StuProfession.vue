@@ -34,12 +34,12 @@
                 <i class="el-icon-menu"></i>
                 <span>我的实习</span>
               </template>
-              <el-menu-item index="/">实习请假申请</el-menu-item>
-              <el-menu-item index="/">实习周报</el-menu-item>
-              <el-menu-item index="/">实习计划</el-menu-item>
-              <el-menu-item index="/">实习报告</el-menu-item>
+              <el-menu-item index="/studentR1">实习请假申请</el-menu-item>
+              <el-menu-item index="/studentR2">实习周报</el-menu-item>
+              <el-menu-item index="/studentR3">实习计划</el-menu-item>
+              <el-menu-item index="/studentR4">实习报告</el-menu-item>
             </el-submenu>
-            <el-menu-item index="/">
+            <el-menu-item index="/studentE">
                 <i class="el-icon-s-order"></i>
                 <span slot="title">我的评价</span>
             </el-menu-item>

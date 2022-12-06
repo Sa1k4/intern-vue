@@ -24,16 +24,16 @@
                 <i class="el-icon-tickets"></i>
                 <span>审批</span>
               </template>
-              <el-menu-item index="/">学生实习审批</el-menu-item>
-              <el-menu-item index="/">学生实习请假审批</el-menu-item>
+              <el-menu-item index="/teacherA1">学生实习审批</el-menu-item>
+              <el-menu-item index="/teacherA2">学生实习请假审批</el-menu-item>
             </el-submenu>
             <el-submenu index="/2">
               <template slot="title">
                 <i class="el-icon-menu"></i>
                 <span>学生管理</span>
               </template>
-              <el-menu-item index="/">学生信息查看</el-menu-item>
-              <el-menu-item index="/">学生添加</el-menu-item>
+              <el-menu-item index="/teacherSM">学生信息查看</el-menu-item>
+              <el-menu-item index="/teacherSA">学生添加</el-menu-item>
             </el-submenu>
         </el-menu>
       </el-aside>

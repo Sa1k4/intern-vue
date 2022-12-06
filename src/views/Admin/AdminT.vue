@@ -348,7 +348,7 @@
                     if(realPage == 0)this.pageNum = 1;
                     else
                     if(res.data.data.length==0)this.pageNum=realPage;
-                    else this.pageNum = pageNum;
+                    else this.pageNum = this.pageNum;
                     this.load();
                   })
 
@@ -376,7 +376,7 @@
                     if(realPage == 0)this.pageNum = 1;
                     else
                     if(res.data.data.length==0)this.pageNum=realPage;
-                    else this.pageNum = pageNum;
+                    else this.pageNum = this.pageNum;
                     this.load();
                   })
 

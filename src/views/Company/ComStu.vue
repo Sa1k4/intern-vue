@@ -248,6 +248,18 @@
         </el-tab-pane>
       </el-tabs>
   
+          <el-dialog title="评价" :visible.sync="dialogFormVisible" width="35%">
+            <el-form size="small" :model="form">     
+              <el-form-item label="评价内容:" prop="eva_content">
+                <el-input type="textarea" :autosize="{ minRows: 15, maxRows: 15}" v-model="form.eva_content" autocomplete="off"></el-input>
+              </el-form-item>  
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="save">确 定</el-button>
+            </div>
+          </el-dialog>
+
         </el-main>
   
       </el-container>
@@ -285,11 +297,14 @@
           student_name2: "",
           student_name3: "",
           activeName: 'tab',
+          form:{},
+          dialogFormVisible: false,
           collapseBtnClass: 'el-icon-s-fold',
           isCollapse: false,
           sideWidth: 200,
           logoTextShow: true,
           headerBg: 'headerBg',
+          SorI:"",
         }
       },
       created() {
@@ -548,7 +563,13 @@
                     }
                   })
         },
-        to1(res){
+        to1(res){  
+        this.$confirm('是否同意该申请?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          
           this.request.get("/company/applyOfStudentYes",{
             params: {
               stu_id: res.stu_id,
@@ -562,8 +583,20 @@
                     this.$message.error("修改失败")
                     }
                   })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });          
+        });
         },
         to2(res){
+          this.$confirm('是否拒绝该申请?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          
           this.request.get("/company/applyOfStudentNo",{
             params: {
               stu_id: res.stu_id,
@@ -577,6 +610,90 @@
                     this.$message.error("修改失败")
                     }
                   })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });          
+        });
+        },
+        quit(res){
+          this.$confirm('是否确认该学生离职?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          
+          this.request.get("/company/applyOfStudentQuit",{
+            params: {
+              stu_id: res.stu_id,
+              pro_id: this.id
+            }
+          }).then(res =>{
+                  if(res.code == 200){
+                    this.$message.success("修改成功")
+                    this.load()
+                    }else {
+                    this.$message.error("修改失败")
+                    }
+                  })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });          
+        });
+        },
+        evaluate(res){
+          this.form = {}
+          this.SorI = ""
+          this.form.stu_id = res.stu_id
+          this.form.com_id = this.userinfo.cpmy_id
+          this.request.post("/evaluate/selectEvaC",this.form).then(res =>{
+            console.log(res.data.data)
+            if(res.data.data == null){
+              this.SorI = "I";
+              }else {
+              this.SorI = "S";
+              this.form = res.data.data
+              }
+          })
+          this.dialogFormVisible = true
+        },
+        save(){
+          const nowDate = new Date();
+          const date = {
+              year: nowDate.getFullYear(),
+              month: nowDate.getMonth() + 1,
+              date: nowDate.getDate(),
+          }
+          const newmonth = date.month > 9 ? date.month : '0' + date.month
+          const day = date.date > 9 ? date.date : '0' + date.date
+          let datetime = date.year + '-' + newmonth + '-' + day
+          this.form.eva_date = datetime;
+          console.log(this.form)
+          if(this.SorI == "I")
+          this.request.post("/evaluate/insertEvaC",this.form).then(res =>{
+            if(res.code == 200){
+              this.$message.success("评价成功")
+              this.dialogFormVisible = false
+              this.form={}
+              this.SorI=""
+              }else {
+              this.$message.error("评价失败")
+              }
+          })
+          if(this.SorI == "S")
+          this.request.post("/evaluate/updateEvaC",this.form).then(res =>{
+            if(res.code == 200){
+              this.$message.success("修改成功")
+              this.dialogFormVisible = false
+              this.form={}
+              this.SorI=""
+              }else {
+              this.$message.error("修改失败")
+              }
+          })
         },
         logout(){
           this.$router.push('/')
