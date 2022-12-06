@@ -371,7 +371,6 @@
           this.request.delete("/student/delete"+id).then(res =>{
             if(res.code == 200){
               this.$message.success("删除成功")
-              
               this.request.get("/student/page",{
             params: {
               pageNum: this.pageNum,
@@ -386,10 +385,9 @@
                     if(realPage == 0)this.pageNum = 1;
                     else
                     if(res.data.data.length==0)this.pageNum=realPage;
-                    else this.pageNum = pageNum;
+                    else this.pageNum = this.pageNum;
                     this.load();
                   })
-
             }else {
               this.$message.error("删除失败")
             }
@@ -400,7 +398,6 @@
           this.request.post("/student/deleteMultiple", ids).then(res =>{
             if(res.code == 200){
               this.$message.success("删除成功")
-              
               this.request.get("/student/page",{
             params: {
               pageNum: this.pageNum,
@@ -415,10 +412,9 @@
                     if(realPage == 0)this.pageNum = 1;
                     else
                     if(res.data.data.length==0)this.pageNum=realPage;
-                    else this.pageNum = pageNum;
+                    else this.pageNum = this.pageNum;
                     this.load();
                   })
-
             }else {
               this.$message.error("删除失败")
             }
