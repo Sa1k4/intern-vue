@@ -121,9 +121,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .wrapper {
-  height: 100%;
+  height: 100vh;
   background-image: linear-gradient(to bottom right, #FC16F4, #39C5BB);
   overflow: hidden;
   padding: 20px;

@@ -320,7 +320,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .wrapper {
         height: 100%;
         background-image: linear-gradient(to bottom right, #FC16F4, #39C5BB);

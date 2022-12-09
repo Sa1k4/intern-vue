@@ -67,6 +67,7 @@
           <div style="margin: 10px 0">
             <el-button type="primary" @click="handleAdd">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
             <el-popconfirm
+                    v-if="(status==0||status==3)" 
                     class="ml-5"
                     confirm-button-text='好的'
                     cancel-button-text='不用了'
@@ -75,7 +76,7 @@
                     title="确定批量删除吗？"
                     @confirm="delMultiple"
             >
-            <el-button v-if="(status==0||status==3)" type="danger" slot="reference">批量删除 <i class="el-icon-remove-outline"></i></el-button>
+            <el-button type="danger" slot="reference">批量删除 <i class="el-icon-remove-outline"></i></el-button>
             </el-popconfirm>
           </div>
   
@@ -281,12 +282,13 @@ import { json } from 'body-parser'
         save(){
           this.$refs['Form'].validate((valid) => {
             if(valid){
+                this.form.com_id = this.userinfo.cpmy_id
                 this.request.post("/profession/addProfession",this.form).then(res =>{
                 if(res.code == 200){
                 this.$message.success("新增成功")
                 this.dialogFormVisible = false
                 this.name=""
-                this.status=""
+                this.status="0"
                 this.pageNum=1
                 this.load()
                 }else {
